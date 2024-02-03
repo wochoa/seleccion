@@ -1,0 +1,100 @@
+      /*al pasar el mouse se desplega los menus verticalmente*/
+      .dropdown:hover>.dropdown-menu{ display: block; }
+    .fondo1{background-image: url(../../img/fondo/bg1.jpg);background-repeat: repeat;}
+    .fondo2{background-image: url(../../img/fondo/bg2.jpg);background-repeat: repeat;}
+    .fondo3{background-image: url(../../img/fondo/bg3.jpg);background-repeat: repeat;}
+    .fondo4{background-image: url(../../img/fondo/bg4.jpg);background-repeat: repeat;}
+    .fondo5{background-image: url(../../img/fondo/bg5.jpg);background-repeat: repeat;}
+    .fondo6{background-image: url(../../img/fondo/bg6.jpg);background-repeat: repeat;}
+    .fondo7{background-image: url(../../img/fondo/bg7.jpg);background-repeat: repeat;}
+    .fondo8{background-image: url(../../img/fondo/bg8.jpg);background-repeat: repeat;}
+    .fondo9{background-image: url(../../img/fondo/bg9.jpg);background-repeat: repeat;}
+    .fondo10{background-image: url(../../img/fondo/bg10.jpg);background-repeat: repeat;}
+    .fondo11{background-image: url(../../img/fondo/line-1.png);background-repeat: repeat;}
+
+    .titulonot{
+      font-family: 'Oswald', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.4;
+      margin: 0;
+      font-weight: 200 !important;
+      letter-spacing: 0.5px;
+      position: absolute;
+      bottom: 20px;
+      color: #eaeaea;
+      left:10px;
+      text-transform: uppercase;
+      }
+      h5,h6{
+       margin: 5px 0px 5px 0px; 
+      line-height: 1.5;
+      font-weight: 400;
+      font-family: 'Oswald', sans-serif;
+      font-size: 13px;
+      text-transform: uppercase;
+      }
+      .destacados .carousel-control {
+      top: 46%;
+      bottom: auto;
+      height: 41px;
+      width: 40px;
+      background: #000;
+      left: -60px;
+      border: 1px solid #fff;
+      }
+
+     .card_not{
+        position: relative;
+        margin: auto;
+        /*margin-bottom: 20px;*/
+        padding-bottom: -1px;
+       }
+    
+      .card_not:before{
+        content: "";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right:0;
+        background: linear-gradient(rgba(255,255,255,0),rgba(7,72,153,0.8));
+      }
+      .titulonot_2{
+        font-family: 'Oswald', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.4;
+        margin: 0;
+        font-weight: 200;
+        letter-spacing: 0.5px;
+      }
+      .titulonot_2,p{
+        font-family: 'Oswald', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.4;
+        margin: 0;
+        font-weight: 200;
+        letter-spacing: 0.5px;
+      }
+      .nav-link,.dropdown-menu{
+        font-family: 'Oswald', sans-serif;
+        
+      }
+
+
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      .fondotarjeta_entidad{
+        background-color: #d5dee7;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
