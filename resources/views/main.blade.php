@@ -91,7 +91,12 @@
                               <i class="fa fa-check"></i>
                               <div class="kt-wizard-v3__nav-label">DATOS PERSONALES</div>
                             </a>
-
+                            @php
+                            $simplificado = Session('simplificado');
+                            @endphp
+                            @if ($simplificado==0)
+                                
+                            
                             <a class="kt-wizard-v3__nav-item" href="{{url('anexos/'.auth()->user()->id.'/'.Session('idpos'))}}" data-ktwizard-type="step" >
                               <span {!! pintaopcion('anexos') !!}>2</span>
                               <i class="fa fa-check"></i>
@@ -113,17 +118,26 @@
                               <div class="kt-wizard-v3__nav-label">CURSOS Y/O CAPACITACIONES</div>
                             </a>
 
-                            {{-- <a class="kt-wizard-v3__nav-item" href="{{url('datospersonales')}}" data-ktwizard-type="step" >
-                              <span {!! pintaopcion('datospersonales') !!} >6</span>
-                              <i class="fa fa-check"></i>
-                              <div class="kt-wizard-v3__nav-label">GENERAR ANEXO 7</div>
-                            </a> --}}
-
                             <a class="kt-wizard-v3__nav-item" href="{{url('enviarinsc/'.auth()->user()->id.'/'.Session('idpos'))}}" data-ktwizard-type="step" >
                               <span {!! pintaopcion('enviarinsc') !!}>6</span>
                               <i class="fa fa-check"></i>
                               <div class="kt-wizard-v3__nav-label">ENVIAR POSTULACIÓN</div>
                             </a>
+                            @else
+                            <a class="kt-wizard-v3__nav-item" href="{{url('unicoarchivo/'.auth()->user()->id.'/'.Session('idpos'))}}" data-ktwizard-type="step" >
+                              <span {!! pintaopcion('unicoarchivo') !!}>2</span>
+                              <i class="fa fa-check"></i>
+                              <div class="kt-wizard-v3__nav-label">CARGAR CV</div>
+                            </a>
+                            <a class="kt-wizard-v3__nav-item" href="{{url('enviarinsc/'.auth()->user()->id.'/'.Session('idpos'))}}" data-ktwizard-type="step" >
+                              <span {!! pintaopcion('enviarinsc') !!}>3</span>
+                              <i class="fa fa-check"></i>
+                              <div class="kt-wizard-v3__nav-label">ENVIAR POSTULACIÓN</div>
+                            </a>
+
+                            @endif
+
+                            
                           </div>
                         </div>
 

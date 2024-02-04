@@ -21,19 +21,21 @@ use Illuminate\Http\Request;
 
 Auth::routes();
 
-Route::get('/foo', function () {
-    Artisan::call('storage:link');
-});
+// Route::get('/foo', function () {
+//     Artisan::call('storage:link');
+// });
 
-Route::get('storage/{file}', function ($file)
-{
+Route::get('storage/{file}','PersonalController@verfiles')->name('verfiles');
+Route::get('archivo/public/{file}','PersonalController@archivo')->name('archivo');
+// Route::get('storage/{file}', function ($file)
+// {
 
-$rutaDeArchivo = storage_path().'/app/public/'.$file;
- //return $rutaDeArchivo;
- return response()->file($rutaDeArchivo);
-});
+// $rutaDeArchivo = storage_path().'/app/public/'.$file;
+//  //return $rutaDeArchivo;
+//  return response()->file($rutaDeArchivo);
+// });
 
-// Route::get('/home', 'HomeController@index')->name('home');
+
 
 Route::get('/','PersonalController@index')->name('inicio');
 Route::get('/main', 'HomeController@index')->name('home');
@@ -55,6 +57,9 @@ Route::get('/formacionacademica/{iduser}/{idplaza}','PersonalController@formacio
 Route::get('/conocimiento/{iduser}/{idplaza}','PersonalController@conocimiento')->name('conocimiento');
 Route::get('/experiencia/{iduser}/{idplaza}','PersonalController@experiencia')->name('experiencia');
 Route::get('/anexos/{iduser}/{idplaza}','PersonalController@anexos')->name('anexos');
+
+
+
 
 
 // cuando los usuarios ingresan haceindo click en el enlace postular
@@ -84,6 +89,13 @@ Route::post('/formanexo','PersonalController@formanexo')->name('formanexo');
 Route::get('/cargaanexoleccionada/{id}','PersonalController@cargaanexoleccionada')->name('cargaanexoleccionada');
 Route::post('/actualizaanexo','PersonalController@actualizaanexo')->name('actualizaanexo'); 
 Route::get('/eliminarregsanexo/{idreg}/{iduser}/{idplaza}','PersonalController@eliminarregsanexo')->name('eliminarregsanexo');
+
+// UNICO ARCHIVO
+Route::get('/unicoarchivo/{iduser}/{idplaza}','PersonalController@unicoarchivo')->name('unicoarchivo');
+Route::post('/formunicoarchivo','PersonalController@formunicoarchivo')->name('formunicoarchivo'); 
+Route::get('/cargafileleccionada/{id}','PersonalController@cargafileleccionada')->name('cargafileleccionada'); 
+Route::post('/actualizaunicofile','PersonalController@actualizaunicofile')->name('actualizaunicofile');
+Route::get('/eliminararchivounico/{idreg}/{iduser}/{idplaza}','PersonalController@eliminararchivounico')->name('eliminararchivounico');
 
 // enlaces para usuarios de administrador
 
@@ -152,8 +164,10 @@ Route::post('/updateevalcurricular','PersonalController@updateevalcurricular')->
 // para subsanar ficha ruc, etc
 Route::post('/formsustentatoriocargar','PersonalController@formsustentatoriocargar')->name('formsustentatoriocargar');
 
-// actualizar avatar
+// cargar unico archivo
 
+
+// actualizar avatar
 
 Route::post('/actualizaravatar','PersonalController@actualizaravatar')->name('actualizaravatar');
 Route::get('/relacionplaza','PersonalController@relacionplaza')->name('relacionplaza');

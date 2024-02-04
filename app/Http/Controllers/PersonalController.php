@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\personal;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Http;
@@ -107,6 +107,31 @@ class PersonalController extends Controller
     }
     
 
+    public function unicoarchivo($iduser,$idplaza)
+    {   $datacono=DB::table('unicoarchivo')->where(['idusuario'=>$iduser,'idplaza'=>$idplaza])->orderBy('idunico','DESC')->get();
+        
+        return view('unicoarchivo',compact('datacono'));
+    }
+    public function cargafileleccionada($id)
+    {
+        $consulta=DB::table('unicoarchivo')->where('idunico',$id)->orderBy('idunico','DESC')->get();
+        return response()->json($consulta);   
+        
+    }
+    
+    public function verfiles($file)
+    {
+        $rutaDeArchivo = storage_path().'/app/public/'.$file;
+        // return $rutaDeArchivo;
+        return response()->file($rutaDeArchivo);
+    }    
+    public function archivo($file)
+    {
+        $rutaDeArchivo = storage_path().'/app/public/'.$file;
+        // return $rutaDeArchivo;
+        return response()->file($rutaDeArchivo);
+    }
+
     // esta funcion carga los procesos de la convocatoria actnuevasplazasiva
 
     public function procesoconvocatoria()
@@ -136,7 +161,7 @@ class PersonalController extends Controller
         //$idexiste=$datos["iduserdet"];
 
         // creamos sus datos del usuario
-            DB::insert('insert into cas_proceso_seleccion (proc_sel_cas_descripcion,proc_sel_cas_fecha_inicio,proc_sel_cas_fecha_termino,cas_proc_sel_fecha_fin_inscripcion,cas_proc_sel_fecha_resultados,cas_proc_sel_estado,id_ejecutora) values (?,?,?,?,?,?,?)', [$datos["procescas"],$datos["fechaini"],$datos["fechafininsc"],$datos["fecharesul"],$datos["fechafinal"],1,1]);
+            DB::insert('insert into cas_proceso_seleccion (proc_sel_cas_descripcion,proc_sel_cas_fecha_inicio,proc_sel_cas_fecha_termino,cas_proc_sel_fecha_fin_inscripcion,cas_proc_sel_fecha_resultados,cas_proc_sel_estado,id_ejecutora,simplificado) values (?,?,?,?,?,?,?,?)', [$datos["procescas"],$datos["fechaini"],$datos["fechafininsc"],$datos["fecharesul"],$datos["fechafinal"],1,1,$datos["tipoproceso"]]);
         // return response()->json($datos);
 
             return redirect('/publiconvocatoria');
@@ -171,13 +196,15 @@ class PersonalController extends Controller
         $fecharesule=$datos["fecharesule"]; // fecah resultados
         $fechafinale=$datos["fechafinale"]; // final proceso
 
+        $tipoprocesoe=$datos["tipoprocesoe"]; // simplificado
+
         //$idexiste=$datos["iduserdet"];
 
         // creamos sus datos del usuario
             // DB::insert('insert into cas_proceso_seleccion (proc_sel_cas_descripcion,proc_sel_cas_fecha_inicio,proc_sel_cas_fecha_termino,cas_proc_sel_fecha_fin_inscripcion,cas_proc_sel_fecha_resultados,cas_proc_sel_estado,id_ejecutora) values (?,?,?,?,?,?,?)', [$datos["procescas"],$datos["fechaini"],$datos["fechafininsc"],$datos["fecharesul"],$datos["fechafinal"],1,1]);
          //return response()->json($datos);
 
-          $sql="UPDATE cas_proceso_seleccion SET proc_sel_cas_descripcion='$procescase',proc_sel_cas_fecha_inicio='$fechainie',proc_sel_cas_fecha_termino='$fechafinale',cas_proc_sel_fecha_fin_inscripcion='$fechafininsce',cas_proc_sel_fecha_resultados='$fecharesule' WHERE id_proc_sel_cas=".$idproceso;
+          $sql="UPDATE cas_proceso_seleccion SET proc_sel_cas_descripcion='$procescase',proc_sel_cas_fecha_inicio='$fechainie',proc_sel_cas_fecha_termino='$fechafinale',cas_proc_sel_fecha_fin_inscripcion='$fechafininsce',cas_proc_sel_fecha_resultados='$fecharesule',simplificado='$tipoprocesoe' WHERE id_proc_sel_cas=".$idproceso;
         $procesocas=DB::update($sql);
 
         return redirect('/publiconvocatoria');
@@ -452,6 +479,11 @@ class PersonalController extends Controller
 
         if($file<>null){
             $ubicacionfila=$request->file('fileforma')->store('public'); 
+
+            $fileanterior=DB::table('formacion')->where('idformacion',$id)->value('archivo_formacion');
+            if(Storage::exists($fileanterior))
+                Storage::delete($fileanterior);
+
             $sql="UPDATE formacion SET nivel='$nivel',grado='$grado',especialidad='$especialidad',centro_estudio='$centro_estudio',anio_inicio='$anioini',anio_fin='$aniofin',fecha_extension='$fecha_extension', archivo_formacion='$ubicacionfila' WHERE idformacion=".$id;
         }
         else{
@@ -470,6 +502,10 @@ class PersonalController extends Controller
 
     public function eliminarregsformacion($idreg,$iduser,$idplaza)
     {
+        $fileanterior=DB::table('formacion')->where('idformacion',$idreg)->value('archivo_formacion');
+            if(Storage::exists($fileanterior))
+                Storage::delete($fileanterior);
+
         $sql="DELETE FROM formacion where idformacion=".$idreg;
         DB::delete($sql);
         session()->flash('cargaeliminado');
@@ -508,7 +544,7 @@ class PersonalController extends Controller
         return response()->json($consulta);   
         
     }
-     public function actualizaconocimiento(Request $request)
+    public function actualizaconocimiento(Request $request)
     {
         $data = $request->all();
         $id=$data["idregformacion"];
@@ -530,6 +566,10 @@ class PersonalController extends Controller
 
             $ubicacionfila=$request->file('fileconoc')->store('public');
 
+            $fileanterior=DB::table('conocimiento')->where('idconocimiento',$id)->value('archivo_concoimiento');
+            if(Storage::exists($fileanterior))
+                Storage::delete($fileanterior);
+
             $sql="UPDATE conocimiento SET requerido='$requerido',tema='$tema',centro_estudio='$centro_estudio',fecha_inicio='$anioini',fecha_fin='$aniofin',duracion='$nhoras',tipo_sustento='$tiposustento', archivo_concoimiento='$ubicacionfila' WHERE idconocimiento=".$id;
         }
         else{
@@ -546,6 +586,10 @@ class PersonalController extends Controller
     }
     public function eliminarregsconocimiento($idreg,$iduser,$idplaza)
     {
+        $fileanterior=DB::table('conocimiento')->where('idconocimiento',$idreg)->value('archivo_concoimiento');
+            if(Storage::exists($fileanterior))
+                Storage::delete($fileanterior);
+
         $sql="DELETE FROM conocimiento where idconocimiento=".$idreg;
         DB::delete($sql);
         session()->flash('cargaeliminado');
@@ -605,6 +649,10 @@ class PersonalController extends Controller
 
             $ubicacionfila=$request->file('fileexpe')->store('public');
 
+            $fileanterior=DB::table('experiencia')->where('idexperiencia',$id)->value('archivo_experiencia');
+            if(Storage::exists($fileanterior))
+                Storage::delete($fileanterior);
+
             $sql="UPDATE experiencia SET tipo_experiencia='$tipo_experiencia',cargo='$cargo',tipo_entidad='$tipo_entidad',nombre_entidad='$nombre_entidad',fecha_inicio='$fecha_inicio',fecha_fin='$fecha_fin',archivo_experiencia='$ubicacionfila' WHERE idexperiencia=".$id;
         }
         else{
@@ -621,6 +669,10 @@ class PersonalController extends Controller
     }
     public function eliminarregsexperiencia($idreg,$iduser,$idplaza)
     {
+        $fileanterior=DB::table('experiencia')->where('idexperiencia',$idreg)->value('archivo_experiencia');
+            if(Storage::exists($fileanterior))
+                Storage::delete($fileanterior);
+
         $sql="DELETE FROM experiencia where idexperiencia=".$idreg;
         DB::delete($sql);
 
@@ -693,6 +745,10 @@ class PersonalController extends Controller
 
             $ubicacionfila=$request->file('fileexpe')->store('public');
 
+            $fileanterior=DB::table('anexos')->where('idanexos',$id)->value('archivo_anexo');
+            if(Storage::exists($fileanterior))
+                Storage::delete($fileanterior);
+
             $sql="UPDATE anexos SET nombreanexo='$anexosedit',archivo_anexo='$ubicacionfila' WHERE idanexos=".$id;
         }
         else{
@@ -709,6 +765,10 @@ class PersonalController extends Controller
     }
     public function eliminarregsanexo($idreg,$iduser,$idplaza)
     {
+        $fileanterior=DB::table('anexos')->where('idanexos',$idreg)->value('archivo_anexo');
+        if(Storage::exists($fileanterior))
+            Storage::delete($fileanterior);
+
         $sql="DELETE FROM anexos where idanexos=".$idreg;
         DB::delete($sql);
 
@@ -740,6 +800,71 @@ class PersonalController extends Controller
         //return view('resumenfile');
  
     }
+    public function formunicoarchivo(Request $request)
+    {
+        $data = $request->all();
+        $idplaza=$data["idplaza"];
+        $idusuario=$data["idusuario"];
+       
+        $ubicacionfila=$request->file('file_ce')->store('public');
+
+
+
+        // creamos sus datos del usuario
+        DB::insert('insert into unicoarchivo (idusuario,idplaza,nombreunicoarchivo,archivo_unicoarchivo) values (?,?,?,?)', [$idusuario,$idplaza,'CV: ARCHIVO UNICO(Archivo PDF)',$ubicacionfila]);
+
+       //return response()->json($data);
+        session()->flash('cargafile');
+       $url='/unicoarchivo/'.$idusuario.'/'.$idplaza;
+       return redirect($url);
+    }
+    public function actualizaunicofile(Request $request)
+    {
+        $data = $request->all();
+        $id=$data["fridunico"];
+        $iduser=$data["iduser"];
+        $idplaza=$data["idplazaedit"];
+
+
+        $file=$request->file('fileconoc');
+
+
+        if($file<>null){
+
+            $ubicacionfila=$request->file('fileconoc')->store('public');
+            $fileanterior=DB::table('unicoarchivo')->where('idunico',$id)->value('archivo_unicoarchivo');
+            // $ruta=
+
+            if(Storage::exists($fileanterior))
+                Storage::delete($fileanterior);
+
+            $sql="UPDATE unicoarchivo SET archivo_unicoarchivo='$ubicacionfila' WHERE idunico=".$id;
+            $affected=DB::update($sql);
+        }
+
+
+        
+        //return response()->json($data);
+        session()->flash('actualizado');
+
+       $url='/unicoarchivo/'.$iduser.'/'.$idplaza;
+       return redirect($url);
+
+    }
+    public function eliminararchivounico($idreg,$iduser,$idplaza)
+    {
+        $fileanterior=DB::table('unicoarchivo')->where('idunico',$idreg)->value('archivo_unicoarchivo');
+        // $ruta=
+
+        if(Storage::exists($fileanterior))
+            Storage::delete($fileanterior);
+
+        $sql="DELETE FROM unicoarchivo where idunico=".$idreg;
+        DB::delete($sql);
+        session()->flash('cargaeliminado');
+       $url='/unicoarchivo/'.$iduser.'/'.$idplaza;
+       return redirect($url);
+    } 
     public function enviarinsc($iduser,$idplaza)
     {
        $dataanexo=DB::table('anexos')->where(['idusuario'=>$iduser,'idplaza'=>$idplaza])->orderBy('idanexos','ASC')->get(); 
@@ -748,6 +873,7 @@ class PersonalController extends Controller
        $conocimiento=DB::table('conocimiento')->where(['idusuario'=>$iduser,'idplaza'=>$idplaza])->get();
        $archivoscargados=DB::table('docsus_personal')->where(['idusuario'=>$iduser,'idplaza'=>$idplaza])->get();
        $colegiatura_dat=DB::table('colegiatura')->where(['idusuario'=>$iduser,'idplaza'=>$idplaza])->get();
+       $unicoarchivo=DB::table('unicoarchivo')->where(['idusuario'=>$iduser,'idplaza'=>$idplaza])->value('archivo_unicoarchivo');
        $envioinscripcion=DB::table('envioinscripcion')->where(['iduser'=>$iduser,'plaza'=>$idplaza,'activo'=>1])->get();
 
        if(count($envioinscripcion)>0)
@@ -760,7 +886,7 @@ class PersonalController extends Controller
 
        //return response()->json($dataanexo);
          
-        return view('enviar',compact('dataanexo','formacion','experiencia','conocimiento','archivoscargados','colegiatura_dat','activo'));
+        return view('enviar',compact('dataanexo','formacion','experiencia','conocimiento','archivoscargados','colegiatura_dat','activo','unicoarchivo'));
     }
     public function formenviarinsc(Request $request)
     {
@@ -817,8 +943,11 @@ class PersonalController extends Controller
             session()->put('idperfil', $idperfil);
 
             $procesocasactual=DB::table('cas_puesto')->join('cas_proceso_seleccion','cas_puesto.cas_pue_proceso_seleccion','=','cas_proceso_seleccion.id_proc_sel_cas')->where('id_cas_puesto',$idp)->get();
-            $idprocesoactual=$procesocasactual[0]->cas_pue_proceso_seleccion;
+            $idprocesoactual=$procesocasactual[0]->cas_pue_proceso_seleccion;//idprocesoseleccion
             $nomprecesosesion=$procesocasactual[0]->proc_sel_cas_descripcion;
+
+            $simplificado=DB::table('cas_proceso_seleccion')->where('id_proc_sel_cas',$idprocesoactual)->value('simplificado');
+            session()->put('simplificado', $simplificado);
 
             session()->put('nomprecesosesion', $nomprecesosesion);
 

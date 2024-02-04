@@ -121,6 +121,7 @@ layout-top-nav
                         $min=date('i');
                       @endphp
                       <td>
+                        <a class="btn btn-primary btn-xs" href="/postulacion/{{$plazas[$i]->id_cas_puesto}}/{{$plazas[$i]->cas_pue_puesto}}/{{$plazas[$i]->cas_pue_oficina}}/{{$plazas[$i]->cas_pue_remuneracion}}/{{$plazas[$i]->idperfil}}">POSTULAR</a>
                       @if($fecha_actual>=$fecha_ini and $fecha_actual<=$fecha_fin)
                         {{-- @if($hora<=18 and $min<=30) --}}
                         <a class="btn btn-primary btn-xs" href="/postulacion/{{$plazas[$i]->id_cas_puesto}}/{{$plazas[$i]->cas_pue_puesto}}/{{$plazas[$i]->cas_pue_oficina}}/{{$plazas[$i]->cas_pue_remuneracion}}/{{$plazas[$i]->idperfil}}">POSTULAR</a>
