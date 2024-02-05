@@ -254,12 +254,12 @@
                                 placeholder="Ingrese el proceso" required>
                         </div>
                         <div class="form-group">
-                          <label>Tipo proceso:</label>
-                          <select name="tipoprocesoe" id="tipoprocesoe" class="form-control form-control-sm">
-                              <option value="0" selected>0-Normal</option>
-                              <option value="1">1-Simple</option>
-                          </select>
-                      </div>
+                            <label>Tipo proceso:</label>
+                            <select name="tipoprocesoe" id="tipoprocesoe" class="form-control form-control-sm">
+                                <option value="0" selected>0-Normal</option>
+                                <option value="1">1-Simple</option>
+                            </select>
+                        </div>
 
                         <div class="row">
                             <div class="col-sm-6">
@@ -356,7 +356,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>Remuneración:</label>
-                                            <input type="number" class="form-control form-control-sm"
+                                            <input type="number" class="form-control form-control-sm" step="0.01"
                                                 name="remuneracion" placeholder="Remuneración" min="1" required>
                                         </div>
                                     </div>
@@ -474,7 +474,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>Remuneración:</label>
-                                            <input type="number" class="form-control form-control-sm"
+                                            <input type="number" class="form-control form-control-sm" step="0.01"
                                                 name="remuneracion1" id="remuneracion1" placeholder="Remuneración"
                                                 min="1" required>
                                         </div>
@@ -591,7 +591,8 @@
 
         function cargar(id, descripcion) {
             $("#idprocesos").val(
-            id); // en el id para nueva plaza (se tiene que cambiar el de editar las plazas de lo contrario no funcionara)
+                id
+                ); // en el id para nueva plaza (se tiene que cambiar el de editar las plazas de lo contrario no funcionara)
             cargarperfil("#perfilpostulante"); // cargamos los perfiles para la plaza a crear
             cargaroficinas("#oficinaplaza"); // cargamos las oficinas para crear nueva plaza
 

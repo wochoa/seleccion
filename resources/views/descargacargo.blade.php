@@ -3,7 +3,7 @@
 <div class="p-3" style="border: 1px dashed #ccc;">
 
     	<div align="center">
-            <img src="{{ asset('dist/img/logo2.png') }}" height="50"><br>
+            <img src="{{ asset('dist/img/logo2.jpg') }}" height="50"><br>
             {{-- CARGO DEL POSTULANTE  --}}<br><br> <strong>ROTULADO GENERADO EN LA PREINSCRIPCION</strong></div><br>
     	<p><strong>Señores:</strong> Gobierno Regional Huánuco</p>
     	<p><strong>Oficina Regional de Administracion</strong></p>
